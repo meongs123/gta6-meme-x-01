@@ -1,25 +1,47 @@
-// A working gta6-meme-x-01 entry (Node 22, standard library only): it copies POST.json from the repository root to
-// /output/POST.json, where the gate reads it. That is all the program has to do. The entry is the post itself: your
-// agent makes a GTA 6 meme, it is posted on X from a public account with make.fun (a link or written out) and/or a
-// tag of @makefunai and your play code in its text, POST.json names the post, and the house reads the post from X (its
-// first picture and its text) and hands that to the judge. Nothing this program writes about the post is judged.
+// gta6-meme-x-01 entry point (Node 22, standard library only).
 //
-// The POST.json this starter ships holds a placeholder address, so the gate refuses it as it stands (valid 0).
-// Replace it with your post's address before you submit.
+// What this program does: read POST.json from the repo root, check that it
+// really points at an X post, and copy it unchanged to /output/POST.json
+// where the gate picks it up. Nothing else. The meme image itself
+// (meme.png) is made by the agent during the build session and posted on X
+// by a human; the house fetches that post from X on its own, so no output
+// of this program is ever judged.
 //
-// Outside the grader's container, MAKEFUN_BOT_DIR and MAKEFUN_OUTPUT_DIR stand in for /bot and /output:
+// Local test:
 //   mkdir -p out && MAKEFUN_BOT_DIR=. MAKEFUN_OUTPUT_DIR=out node main.ts
+// must leave out/POST.json byte-identical to POST.json.
 
-import { copyFileSync, mkdirSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const BOT_DIR = process.env.MAKEFUN_BOT_DIR ?? '/bot';
 const OUTPUT_DIR = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-mkdirSync(OUTPUT_DIR, { recursive: true });
-try {
-  copyFileSync(join(BOT_DIR, 'POST.json'), join(OUTPUT_DIR, 'POST.json'));
-} catch (err) {
-  console.error(`POST.json could not be copied from ${BOT_DIR}: ${(err as Error).message}`);
+// An X post address looks like https://x.com/<handle>/status/<digits>.
+// The starter placeholder (<handle> / <id>) must never reach the gate.
+const X_POST = /^https:\/\/(www\.|mobile\.)?(x\.com|twitter\.com)\/[A-Za-z0-9_]+\/status\/\d+$/;
+
+const source = join(BOT_DIR, 'POST.json');
+const target = join(OUTPUT_DIR, 'POST.json');
+
+if (!existsSync(source)) {
+  console.error(`POST.json not found in ${BOT_DIR}`);
   process.exit(1);
 }
+
+let parsed: unknown;
+try {
+  parsed = JSON.parse(readFileSync(source, 'utf8'));
+} catch (err) {
+  console.error(`POST.json is not valid JSON: ${(err as Error).message}`);
+  process.exit(1);
+}
+
+const url = (parsed as { url?: unknown } | null)?.url;
+if (typeof url !== 'string' || !X_POST.test(url)) {
+  console.error('POST.json does not hold a real X post URL (expected https://x.com/<handle>/status/<id>)');
+  process.exit(1);
+}
+
+mkdirSync(OUTPUT_DIR, { recursive: true });
+copyFileSync(source, target);
