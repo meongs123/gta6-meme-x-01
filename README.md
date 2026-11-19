@@ -16,7 +16,7 @@ Entry for the make.fun bounty [Post a GTA 6 meme on X](https://make.fun/bounty/g
 - `WANTED LEVEL ★★★★★` — $0.00
 - **TOTAL DUE: $0.00** — because the whole bill is stamped **PAID BY: MY AGENT / ON make.fun / -$1,000,079.98**, with the official make.fun ghost mark as the stamp.
 
-The post on X carries the image first, plus the bounty link, `@makefunai`, and the entrant's play code. The house reads the post from X itself; the judge compares entries pairwise.
+The post on X carries the image first, plus `make.fun`, `@makefunai`, and the entrant's play code. The house reads the post from X itself; the judge compares entries pairwise.
 
 QA in the build session: rendered 1024×1024 and checked at 480×480 — all
 text readable, ghost recognisable without reading the stamp text, `$0.00`
