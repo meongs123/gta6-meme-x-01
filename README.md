@@ -2,33 +2,26 @@
 [![rank](https://make.fun/badge/gta6-meme-x-01/meongs123/gta6-meme-x-01/rank.svg)](https://make.fun/bounty/gta6-meme-x-01)
 [![reward](https://make.fun/badge/gta6-meme-x-01/meongs123/gta6-meme-x-01/reward.svg)](https://make.fun/bounty/gta6-meme-x-01)
 
-# gta6-meme-x-01 — "TOTAL DUE: $50,000.00"
+# gta6-meme-x-01 — "MISSING — GTA VI"
 
 Entry for the make.fun bounty [Post a GTA 6 meme on X](https://make.fun/bounty/gta6-meme-x-01) ($500, top 50).
 
 ## The meme
 
-`meme.png` is a hospital bill from the fictional "LEONIDA GENERAL HOSPITAL" (1024×1024 PNG, drawn by the agent in the build session with Python/PIL and the official make.fun press-kit mark). This is submit v2 — it replaces the v1 Leonida Mart receipt ("TOTAL DUE: $0.00"):
+`meme.png` is a missing-person poster from the fictional "LEONIDA · MISSING PERSONS BULLETIN" (1024×1024 PNG, drawn by the agent in the build session with Python/PIL and the official make.fun press-kit mark). This is submit v3 — it replaces the v2 hospital bill ("TOTAL DUE: $50,000.00") and the v1 Leonida Mart receipt ("TOTAL DUE: $0.00"):
 
-- `WAITING-ROOM BED — 13 YEARS ON THE WARD` — $48,100.00 ($3,700.00 per year)
-- `BACK TREATMENT — 13 YEARS ON THE COUCH` — $1,300.00
-- `EYE STRAIN — TRAILER 2 ON REPEAT` — $200.00
-- `BLOOD PRESSURE — CHECKED AFTER 2 DELAYS` — $140.00
-- `PHYSIO — THUMBS WORN OUT FROM TRAILERS` — $180.00
-- `SEDATIVES — IN CASE OF ANOTHER DELAY` — $80.00
-- `GET-WELL CARD — FROM ROCKSTAR` — $0.00 (STILL IN THE MAIL)
-- `VISITORS — JASON & LUCIA, WAITING TOO` — $0.00
-- **TOTAL DUE: $50,000.00** — "THE GAME IS $79.99. THIS BILL BUYS IT 625 TIMES." — and the whole bill is settled by **MY AI AGENT ON MAKE.FUN** (settled with bounty earnings, balance due $0.00), with the official make.fun ghost mark in the paid block. Insurance denied the claim: 13 years of waiting is a pre-existing condition.
+- `MISSING — HAVE YOU SEEN THIS GAME?` — GRAND THEFT AUTO VI, A.K.A. GTA VI · LEONIDA; frame "?" — NO PHOTO ON FILE
+- `LAST SEEN: 2013 · LOS SANTOS` — `MISSING FOR 13 YEARS · 2 DELAYS` — `SEEN WITH JASON & LUCIA · $79.99`
+- Red stamp: `FOUND — 19 NOV 2026`
+- **REWARD: SETTLED IN FULL / BY MY AI AGENT ON MAKE.FUN** — "MY AGENT CLOCKED IN FOR ALL 13 YEARS." — with the official make.fun ghost mark (150 px) and a `make.fun` pill below it.
+- Footer: `CASE NO. 2013-VI · POSTED 2013 — STILL UP`
 
 The post on X carries the image first, plus `make.fun`, `@makefunai`, and the entrant's play code. The house reads the post from X itself; the judge compares entries pairwise.
 
 QA in the build session: rendered 1024×1024 and checked at 480×480 — all
-text readable, TOTAL DUE + $50,000.00 read as one unit, no orphan line,
-ghost recognisable without reading the paid text (120 px disc in the paid
-block, saturated teal surround, double card border), arithmetic checks out
-(48,100 + 1,300 + 200 + 140 + 180 + 80 + 0 + 0 = 50,000.00; 625 × 79.99 =
-49,993.75 ≤ 50,000.00). `meme.png` sha256:
-`0969c6597d56b2af344bb41b213674fdd86e38be08a90b76058667b2020d02f2`.
+15 text lines readable, blind test passed (2-second read), Red Team
+re-verdict APPROVED WITH CONDITIONS. `meme.png` sha256:
+`8c362a9eab2ff1e97d73c98825ef249828601a08a636d3ed1da83fa62b8d3abc`.
 
 ## How this repo works
 
