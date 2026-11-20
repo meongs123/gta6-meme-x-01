@@ -1,47 +1,42 @@
-// gta6-meme-x-01 entry point (Node 22, standard library only).
-//
-// What this program does: read POST.json from the repo root, check that it
-// really points at an X post, and copy it unchanged to /output/POST.json
-// where the gate picks it up. Nothing else. The meme image itself
-// (meme.png) is made by the agent during the build session and posted on X
-// by a human; the house fetches that post from X on its own, so no output
-// of this program is ever judged.
-//
-// Local test:
-//   mkdir -p out && MAKEFUN_BOT_DIR=. MAKEFUN_OUTPUT_DIR=out node main.ts
-// must leave out/POST.json byte-identical to POST.json.
+import { copyFileSync, mkdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 
-import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+// Entry program for the gta6-meme-x-01 bounty.
+// It checks POST.json (the address of the X post carrying the meme) and
+// copies it, byte for byte, into the harness output directory.
+// It renders nothing and fetches nothing: the meme image is made by the
+// agent in the build session, and the post itself is read by the site.
 
-const BOT_DIR = process.env.MAKEFUN_BOT_DIR ?? '/bot';
-const OUTPUT_DIR = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+const botDir = process.env.MAKEFUN_BOT_DIR ?? ".";
+const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+const inputPath = path.join(botDir, "POST.json");
 
-// An X post address looks like https://x.com/<handle>/status/<digits>.
-// The starter placeholder (<handle> / <id>) must never reach the gate.
-const X_POST = /^https:\/\/(www\.|mobile\.)?(x\.com|twitter\.com)\/[A-Za-z0-9_]+\/status\/\d+$/;
+const raw = readFileSync(inputPath, "utf8");
 
-const source = join(BOT_DIR, 'POST.json');
-const target = join(OUTPUT_DIR, 'POST.json');
-
-if (!existsSync(source)) {
-  console.error(`POST.json not found in ${BOT_DIR}`);
-  process.exit(1);
-}
-
-let parsed: unknown;
+let data: unknown;
 try {
-  parsed = JSON.parse(readFileSync(source, 'utf8'));
-} catch (err) {
-  console.error(`POST.json is not valid JSON: ${(err as Error).message}`);
-  process.exit(1);
+  data = JSON.parse(raw);
+} catch {
+  throw new Error("POST.json is not valid JSON");
 }
 
-const url = (parsed as { url?: unknown } | null)?.url;
-if (typeof url !== 'string' || !X_POST.test(url)) {
-  console.error('POST.json does not hold a real X post URL (expected https://x.com/<handle>/status/<id>)');
-  process.exit(1);
+if (typeof data !== "object" || data === null || Array.isArray(data)) {
+  throw new Error("POST.json must be a JSON object with a url field");
 }
 
-mkdirSync(OUTPUT_DIR, { recursive: true });
-copyFileSync(source, target);
+const url = (data as Record<string, unknown>).url;
+if (
+  typeof url !== "string" ||
+  !/^https:\/\/x\.com\/[A-Za-z0-9_]+\/status\/[0-9]+$/.test(url)
+) {
+  throw new Error("POST.json url must be a real x.com/<handle>/status/<id> URL");
+}
+
+// The entry format is exactly one field: the post address. Anything else
+// in the file is a mistake, not part of the entry.
+if (Object.keys(data as Record<string, unknown>).length !== 1) {
+  throw new Error("POST.json must contain only the url field");
+}
+
+mkdirSync(outDir, { recursive: true });
+copyFileSync(inputPath, path.join(outDir, "POST.json"));
